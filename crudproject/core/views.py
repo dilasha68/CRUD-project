@@ -36,10 +36,10 @@ def update_one(request, id=None):
     return render(request, 'core/update_blog.html', {'form': form})
 
 def delete_one(request, id=None):
+    if id is None:
+        raise Http404('No Lookup Provided.')
+    obj = get_object_or_404(BlogModel, id=id)
     if request.method == 'POST':
-        if id is None:
-            raise Http404('No Lookup Provided.')
-        obj = get_object_or_404(BlogModel, id=id)
         obj.delete()
         return redirect('home')
-    return render(request, 'core/delete_blog.html')
+    return render(request, 'core/delete_blog.html', {'obj': obj})
